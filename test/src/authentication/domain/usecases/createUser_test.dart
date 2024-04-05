@@ -12,6 +12,7 @@
 
 import 'package:clean_arch_tdd_bloc/src/authentication/domain/repositories/auth_repo.dart';
 import 'package:clean_arch_tdd_bloc/src/authentication/domain/usecases/createUser.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -30,6 +31,8 @@ void main() {
     },
   );
 
+  // usecase() / usercase call() function takes createUserParams values for userdata. so we need to generate empty dummy data models like that. so we create empty model.
+  final params = CreateUserParam.empty();
   test(
     'Should call the [AuthRepo.createUser]',
     () async {
@@ -48,13 +51,35 @@ void main() {
         ),
         // thenAnswer works when successful return value after async function.
         // thenReturn works non-async functions.
-      ).thenAnswer((invocation) => null);
+      ).thenAnswer(
+        (_) async => const Right(null),
+      ); // now authRepo.createUser returns ResultType, which is either right or left type. so we need the right type , left is failure.
 
-      final params = const CreateUserParam(
-          createdAt: createdAt, name: name, avatar: avatar);
+      // Till above is the expected result to be returned when that function is called. so we expect it in thenAnswer.
 
       // Act
-      usecase(params);
+      final result = await usecase(params);
+      // this is how the code will call the usecase and that will call the createUser function . and the expected result should be what we called in when function above.
+      // and we have to match that this result returns the above expected result.
+
+      // Assert
+      expect(
+        result,
+        equals(
+          const Right<dynamic, void>(null),
+        ),
+      ); // we match given result with expected one ( which when gives )
+      verify(
+        () => authRepo.createUser(
+          createdAt: params.createdAt,
+          name: params.name,
+          avatar: params.avatar,
+        ),
+      ).called(
+        1,
+      ); // verifies that is usecase actually called creaetUser function from AuthRepo actually .and also just once.
+
+      verifyNoMoreInteractions(authRepo); // making sure no more interactions.
     },
   );
 }

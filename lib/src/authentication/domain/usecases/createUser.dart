@@ -17,7 +17,7 @@ class CreateUser implements UsecaseWithParams<void, CreateUserParam> {
 
   // Just to call the createUser function with just the CreateUser() like this, we need to create usecase in the core/usecase folder, and create abstract class then implement it here and override the call method. so now we can call the function without naming it.
   @override
-  ResultFuture call(CreateUserParam params) async => authRepo.createUser(
+  ResultFuture<void> call(CreateUserParam params) async => authRepo.createUser(
         createdAt: params.createdAt,
         name: params.name,
         avatar: params.avatar,
@@ -27,6 +27,13 @@ class CreateUser implements UsecaseWithParams<void, CreateUserParam> {
 class CreateUserParam extends Equatable {
   const CreateUserParam(
       {required this.createdAt, required this.name, required this.avatar});
+
+  // creating an empty model for every Model type class for demo data in case of tests.
+  const CreateUserParam.empty()
+      : this(
+            avatar: 'empty.avatart',
+            createdAt: 'emtpy.createdAt',
+            name: 'empty.name');
 
   final String createdAt;
   final String name;

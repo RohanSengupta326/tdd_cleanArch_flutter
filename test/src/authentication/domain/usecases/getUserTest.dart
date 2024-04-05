@@ -1,4 +1,4 @@
-import 'package:clean_arch_tdd_bloc/src/authentication/domain/entities/entity.dart';
+import 'package:clean_arch_tdd_bloc/src/authentication/domain/entities/user.dart';
 import 'package:clean_arch_tdd_bloc/src/authentication/domain/repositories/auth_repo.dart';
 import 'package:clean_arch_tdd_bloc/src/core/typedefs/typedef.dart';
 import 'package:clean_arch_tdd_bloc/src/core/usecase/usecase.dart';
