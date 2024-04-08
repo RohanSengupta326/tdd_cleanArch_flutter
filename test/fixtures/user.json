@@ -1,6 +1,6 @@
 {
-    "avatar": "empty.avatar",
-    "createdAt": "empty.createdAt",
-    "id": "empty.id",
-    "name": "empty.name"
+  "id": "1",
+  "avatar": "_empty.avatar",
+  "createdAt": "_empty.createdAt",
+  "name": "_empty.name",
 }

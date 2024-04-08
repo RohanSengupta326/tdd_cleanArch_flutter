@@ -1,47 +1,45 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:clean_arch_tdd_bloc/src/authentication/data/datasources/authentication_remote_data_source.dart';
-import 'package:clean_arch_tdd_bloc/src/authentication/domain/entities/user.dart';
-import 'package:clean_arch_tdd_bloc/src/authentication/domain/repositories/auth_repo.dart';
-import 'package:clean_arch_tdd_bloc/src/core/errors/exceptions.dart';
-import 'package:clean_arch_tdd_bloc/src/core/errors/failure.dart';
-import 'package:clean_arch_tdd_bloc/src/core/typedefs/typedef.dart';
 import 'package:dartz/dartz.dart';
 
-class AuthenticationRepositoryImplementation implements AuthRepo {
-  final AuthenticationRemoteDataSource authenticationRemoteDataSource;
-  AuthenticationRepositoryImplementation({
-    required this.authenticationRemoteDataSource,
-  });
+import '../../../../core/errors/exceptions.dart';
+import '../../../../core/errors/failure.dart';
+import '../../../../core/utils/typedef.dart';
+import '../../domain/entities/user.dart';
+import '../../domain/repositories/authentication_repository.dart';
+import '../datasources/authentication_remote_data_source.dart';
+
+class AuthenticationRepositoryImplementation
+    implements AuthenticationRepository {
+  const AuthenticationRepositoryImplementation(this._remoteDataSource);
+
+  final AuthenticationRemoteDataSource _remoteDataSource;
 
   @override
   ResultVoid createUser(
       {required String createdAt,
       required String name,
       required String avatar}) async {
-    // write tests before you implement this functions.
-    // then when test fails , then write the implementation as much as needed just to pass the test.
-
+    // Test-Driven Development
+    // call the remote data source
+    // check if the method returns the proper data
+    // make sure that it returns the proper data if there is no exception
+    // // check if when the remoteDataSource throws an exception, we return a
+    // failure
     try {
-      await authenticationRemoteDataSource.createUser(
+      await _remoteDataSource.createUser(
           createdAt: createdAt, name: name, avatar: avatar);
-      return Right(null);
+      return const Right(null);
     } on APIException catch (e) {
-      return Left(
-        ApiFailure(
-          errorMsg: e.message,
-          errorCode: e.statusCode,
-        ),
-      );
+      return Left(APIFailure.fromException(e));
     }
   }
 
   @override
-  ResultFuture<List<Users>> getUser() async {
+  ResultFuture<List<User>> getUsers() async {
     try {
-      final result = await authenticationRemoteDataSource.getUser();
+      final result = await _remoteDataSource.getUsers();
       return Right(result);
     } on APIException catch (e) {
-      return Left(ApiFailure(errorCode: e.statusCode, errorMsg: e.message));
+      return Left(APIFailure.fromException(e));
     }
   }
 }

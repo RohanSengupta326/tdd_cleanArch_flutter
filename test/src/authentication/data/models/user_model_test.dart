@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:clean_arch_tdd_bloc/core/utils/typedef.dart';
 import 'package:clean_arch_tdd_bloc/src/authentication/data/models/user_model.dart';
 import 'package:clean_arch_tdd_bloc/src/authentication/domain/entities/user.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,116 +11,64 @@ import '../../../../fixtures/fixture_reader.dart';
 void main() {
   const tModel = UserModel.empty();
 
-  test(
-    '[UserModel] should be a subclass of [User] entity',
-    () {
-      // act  : nothing to call and check result here.
-
-      // assert
-      expect(
-        tModel,
-        isA<Users>(),
-      ); // isA meaning, if UserModel extends Users entity.
-    },
-  );
+  test('should be a subclass of [User] entity', () {
+    //  Assert
+    expect(tModel, isA<User>());
+  });
 
   final tJson = fixture('user.json');
-  final tMap = jsonDecode(tJson) as Map<String, dynamic>;
+  final tMap = jsonDecode(tJson) as DataMap;
 
-  // grouping tests together. Testing all the functions of UserModel.
-  group(
-    'fromMap Test',
-    () {
-      test(
-        'Should return a [UserModel] with right data',
-        () {
-          final result = UserModel.fromMap(tMap);
-          expect(
-            result,
-            equals(
-              tModel,
-            ),
-          );
-        },
-      );
-    },
-  );
-  group(
-    'fromJson Test',
-    () {
-      test('Should return [UserModel] with right data', () {
-        final result = UserModel.fromJson(tJson);
-        expect(
-          result,
-          equals(
-            tModel,
-          ),
-        );
+  group('fromMap', () {
+    test('should return a [UserModel] with the right data', () {
+      //  Act
+      final result = UserModel.fromMap(tMap);
+      expect(result, equals(tModel));
+    });
+  });
+
+  group('fromJson', () {
+    test('should return a [UserModel] with the right data', () {
+      //  Act
+      final result = UserModel.fromJson(tJson);
+      expect(result, equals(tModel));
+    });
+  });
+
+  group('toMap', () {
+    test('should return a [Map] with the right data', () {
+      //  Act
+      final result = tModel.toMap();
+
+      // Assert
+      expect(result, equals(tMap));
+    });
+  });
+
+  group('toJson', () {
+    test('should return a [JSON] with the right data', () {
+      //  Act
+      final result = tModel.toJson();
+      final tJson = jsonEncode({
+        "id": "1",
+        "avatar": "_empty.avatar",
+        "createdAt": "_empty.createdAt",
+        "name": "_empty.name",
       });
-    },
-  );
 
-  group(
-    'toMap Test',
-    () {
-      test(
-        'Should return [Map<String,dynamic>] with right data',
-        () {
-          final result = tModel.toMap();
-          expect(
-            result,
-            equals(
-              tMap,
-            ),
-          );
-        },
-      );
-    },
-  );
+      // Assert
+      expect(result, tJson);
+    });
+  });
 
-  group(
-    'toJson Test',
-    () {
-      test(
-        'Should return Json',
-        () {
-          final result = tModel.toJson();
-          final tJson = json.encode(
-            {
-              "avatar": "empty.avatar",
-              "createdAt": "empty.createdAt",
-              "id": "empty.id",
-              "name": "empty.name"
-            },
-          ); // here we are hard coding the json in cause tJson declared before is not working.
+  group('copyWith', () {
+    test('should return a [UserModel] with different data', () {
+      //  Arrange
 
-          expect(
-            result,
-            equals(
-              tJson,
-            ),
-          );
-        },
-      );
-    },
-  );
+      // Act
+      final result = tModel.copyWith(name: 'Paul');
 
-  group(
-    'copyWith Test',
-    () {
-      test(
-        'Should return a [UserModel] with different data',
-        () {
-          final result = tModel.copyWith(name: 'Rohan');
-
-          expect(
-            result.name,
-            equals(
-              'Rohan',
-            ),
-          );
-        },
-      );
-    },
-  );
+      expect(result.name, equals('Paul'));
+    });
+  });
 }

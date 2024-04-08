@@ -1,23 +1,20 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
-class Users extends Equatable {
-  const Users({
+class User extends Equatable{
+  const User({
     required this.id,
     required this.createdAt,
     required this.name,
     required this.avatar,
-  });
+});
 
-  // empty model class .
-  const Users.empty()
-      : this(
-          avatar: 'empty.avatar',
-          createdAt: 'empty.createdAt',
-          id: 'empty.id',
-          name: 'empty.name',
-        );
+  const User.empty()
+  : this(
+    id: '1',
+    createdAt: '_empty.createdAt',
+    name: '_empty.name',
+    avatar: '_empty.avatar',
+  );
 
   final String id;
   final String createdAt;
@@ -25,5 +22,5 @@ class Users extends Equatable {
   final String avatar;
 
   @override
-  List<Object> get props => [id, createdAt, name, avatar];
+  List<Object?> get props => [id, name, avatar];
 }

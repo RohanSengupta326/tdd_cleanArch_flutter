@@ -1,59 +1,55 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:clean_arch_tdd_bloc/src/authentication/domain/entities/user.dart';
 
-// WE TEST ALL MODELS IN DATA LAYER.
-class UserModel extends Users {
+import '../../../../core/utils/typedef.dart';
+
+class UserModel extends User {
   const UserModel({
     required super.avatar,
-    required super.createdAt,
     required super.id,
+    required super.createdAt,
     required super.name,
   });
 
   const UserModel.empty()
       : this(
-          avatar: "empty.avatar",
-          createdAt: "empty.createdAt",
-          id: "empty.id",
-          name: "empty.name",
+          id: '1',
+          createdAt: '_empty.createdAt',
+          name: '_empty.name',
+          avatar: '_empty.avatar',
         );
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'avatar': avatar,
-      'createdAt': createdAt,
-      'id': id,
-      'name': name,
-    };
-  }
-
-  factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
-      avatar: map['avatar'] as String,
-      createdAt: map['createdAt'] as String,
-      id: map['id'] as String,
-      name: map['name'] as String,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
   factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
+      UserModel.fromMap(jsonDecode(source) as DataMap);
+
+  UserModel.fromMap(DataMap map)
+      : this(
+          avatar: map['avatar'] as String,
+          id: map['id'] as String,
+          createdAt: map['createdAt'] as String,
+          name: map['name'] as String,
+        );
 
   UserModel copyWith({
     String? avatar,
-    String? createdAt,
     String? id,
+    String? createdAt,
     String? name,
   }) {
     return UserModel(
-      avatar: avatar ?? this.avatar,
-      createdAt: createdAt ?? this.createdAt,
-      id: id ?? this.id,
-      name: name ?? this.name,
-    );
+        avatar: avatar ?? this.avatar,
+        id: id ?? this.id,
+        createdAt: createdAt ?? this.createdAt,
+        name: name ?? this.name);
   }
+
+  DataMap toMap() => {
+        'id': id,
+        'avatar': avatar,
+        'createdAt': createdAt,
+        'name': name,
+      };
+
+  String toJson() => jsonEncode(toMap());
 }
