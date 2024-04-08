@@ -38,7 +38,8 @@ void main() {
               createdAt: any(named: 'createdAt'),
               name: any(named: 'name'),
               avatar: any(named: 'avatar')),
-        ).thenAnswer((_) async => Future.value());
+        ).thenAnswer((_) async => Future
+            .value()); // normally returns void but we can't write void so we write Future.value();
 
         //  act
         final result = await repoImpl.createUser(
@@ -46,6 +47,7 @@ void main() {
 
         //  assert
         expect(result, equals(const Right(null)));
+
         verify(() => remoteDataSource.createUser(
               createdAt: createdAt,
               name: name,
