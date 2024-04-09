@@ -14,12 +14,15 @@ import '../../src/authentication/presentation/cubit/authentication_cubit.dart';
 // instantiating GetIt.
 final serviceLocator = GetIt.instance;
 
+// we call this method/injection whenever our application starts. So all the dependencies are loaded at the very beginning.
 Future<void> init() async {
+  //
+
   // .. used for accesing the same serviceLocator instance. not calling it multiple times
   serviceLocator
     ..registerFactory(() => AuthenticationCubit(
           // registerFactory is for providing the dependency for the top/starting level which is cubit here.
-          // registerSingletorn is for all the later dependencies.
+          // registerlazySingleton is for all the later dependencies lazily, when needed.
 
           createUser:
               serviceLocator(), // serviceLocator find the wherever the dependency was instantiated.

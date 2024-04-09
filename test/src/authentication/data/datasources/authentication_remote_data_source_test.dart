@@ -25,7 +25,9 @@ void main() {
     test(
       'should complete successfully when the status code is 200 or 201',
       () async {
-        when(() => client.post(any(), body: any(named: 'body'))).thenAnswer(
+        when(() => client.post(any(),
+            body: any(named: 'body'),
+            headers: any(named: 'headers'))).thenAnswer(
           (_) async => http.Response('User created successfully', 201),
         );
 
@@ -51,6 +53,9 @@ void main() {
               'name': 'name',
               'avatar': 'avatar',
             }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
           ),
         ).called(1);
 
@@ -62,7 +67,9 @@ void main() {
       'should throw [APIException] when the status code is not 200 or '
       '201',
       () async {
-        when(() => client.post(any(), body: any(named: 'body'))).thenAnswer(
+        when(() => client.post(any(),
+            body: any(named: 'body'),
+            headers: any(named: 'headers'))).thenAnswer(
           (_) async => http.Response('Invalid email address', 400),
         );
         final methodCall = remoteDataSource.createUser;
@@ -85,6 +92,7 @@ void main() {
               'name': 'name',
               'avatar': 'avatar',
             }),
+            headers: {'Content-Type': 'application/json'},
           ),
         ).called(1);
 

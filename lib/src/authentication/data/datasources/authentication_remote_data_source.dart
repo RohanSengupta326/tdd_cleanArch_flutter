@@ -20,7 +20,7 @@ abstract class AuthenticationRemoteDataSource {
 //
 
 const kCreateUserEndpoint = '/test-api/users';
-const kGetUserEndpoint = '/test-api/user';
+const kGetUserEndpoint = '/test-api/users';
 
 class AuthRemoteDataSrcImpl implements AuthenticationRemoteDataSource {
   const AuthRemoteDataSrcImpl(this._client);
@@ -48,6 +48,7 @@ class AuthRemoteDataSrcImpl implements AuthenticationRemoteDataSource {
           'name': name,
           'avatar': avatar,
         }),
+        headers: {'Content-Type': 'application/json'},
       );
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw APIException(
