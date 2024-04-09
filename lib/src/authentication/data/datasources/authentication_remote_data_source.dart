@@ -46,7 +46,7 @@ class AuthRemoteDataSrcImpl implements AuthenticationRemoteDataSource {
         body: jsonEncode({
           'createdAt': createdAt,
           'name': name,
-          'avatar': avatar,
+          // 'avatar': avatar,
         }),
         headers: {'Content-Type': 'application/json'},
       );
