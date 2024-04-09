@@ -12,7 +12,7 @@ class AuthenticationBloc
     required GetUsers getUsers,
   })  : _createUser = createUser,
         _getUsers = getUsers,
-        super(const  AuthenticationInitial()) {
+        super(AuthenticationInitial()) {
     on<CreateUserEvent>(_createUserHandler);
     on<GetUsersEvent>(_getUsersHandler);
   }
@@ -31,5 +31,26 @@ class AuthenticationBloc
       name: event.name,
       avatar: event.avatar,
     ));
+
+    // now the usecase createUser called above return ResultVoid, which is either a failure or a void.
+    // so parsing that using result.fold, first method inside fold represents left, and second method represents right.
+    // and emiting states based on that.
+    result.fold(
+      (failure) => emit(AuthenticationError(failure.errorMessage)),
+      (_) => emit(const UserCreated()),
+    );
+  }
+
+  Future<void> _getUsersHandler(
+    GetUsersEvent event,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    emit(const GettingUsers());
+    final result = await _getUsers();
+
+    result.fold(
+      (failure) => emit(AuthenticationError(failure.errorMessage)),
+      (users) => emit(UsersLoaded(users)),
+    );
   }
 }
